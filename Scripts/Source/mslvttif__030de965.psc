@@ -26,12 +26,7 @@ Else
             if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
                 DLC1VampireTurn.PlayerBitesMe(akSpeaker)
             endif
-            ; Game.GetPlayer().PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
-            actor[] sexActors = new actor[2]
-            sexActors[0] = Game.GetPlayer()
-            sexActors[1] = akSpeaker
-            sslBaseAnimation[] anims = SexLab.GetAnimationsByTags(2, "sex")
-            SexLab.StartSex(sexActors, anims)
+            Handler.StartFeedingSex(akSpeaker)
             PlayerVampireQuest.VampireFeed(akSpeaker, button, 0)
         Endif
     Else
@@ -69,4 +64,4 @@ Faction Property mslVTFeedDialogueFailFAC  Auto
 
 mslVTMCMDebugSCR Property mslVTMCMQST  Auto  
 
-SexLabFramework Property SexLab Auto
+VTSLHandler Property Handler Auto
