@@ -21,14 +21,7 @@ If mslVTMCMQST.CheckNoBite(Game.GetPlayer())
     ;do nothing
 Else
     If mslVTSetFeedMode.Value == 0
-        int button = FeedChoice.Show()
-        If (button >= 0 && button <= 5)
-            if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
-                DLC1VampireTurn.PlayerBitesMe(akSpeaker)
-            endif
-            Handler.StartFeedingSex(akSpeaker)
-            PlayerVampireQuest.VampireFeed(akSpeaker, button, 0)
-        Endif
+        Handler.StartFeedingSex(akSpeaker)
     Else
         if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
             DLC1VampireTurn.PlayerBitesMe(akSpeaker)
