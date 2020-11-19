@@ -7,10 +7,17 @@ Function StartFeedingSex(Actor akSpeaker)
     actor[] sexActors = new actor[2]
     sexActors[0] = PlayerRef
     sexActors[1] = akSpeaker
-    sslBaseAnimation[] anims = SexLab.GetAnimationsByTags(2, "Vampire")
-    if (anims.Length == 0)
-        ; fallback to default sex animations if no vampire anims. found
-        anims = SexLab.GetAnimationsByTags(2, "Vaginal,Anal,Oral", "", false)
+    sslBaseAnimation[] anims
+    int sexPlayer = PlayerRef.GetActorBase().GetSex()
+    int sexSpeaker = akSpeaker.GetLeveledActorBase().GetSex()
+    if sexPlayer == 0 ; male vampire
+        anims = SexLab.GetAnimationsByTags(2, "Vapire,FM")
+    Else ; female vampire
+        if sexSpeaker == 0 ; female vampire on male victims
+            anims = SexLab.GetAnimationsByTags(2, "Cowgirl")
+        else ; female vampire FF
+            anims = SexLab.GetAnimationsByTags(2, "Vaginal,Facing,Loving", "Furniture,Aggressive,Anal")
+        endif
     endif
     SexLab.StartSex(sexActors, anims)
 EndFunction

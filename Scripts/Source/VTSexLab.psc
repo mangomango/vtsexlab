@@ -48,7 +48,7 @@ event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sende
             if akAnother.IsInFaction(DLC1PotentialVampireFaction) && akAnother.IsInFaction(DLC1PlayerTurnedVampire) == False
                 DLC1VampireTurn.PlayerBitesMe(akAnother)
             endif
-            PlayerVampireQuest.VampireFeed(akAnother, button, 0)
+            PlayerVampireQuest.VampireFeed(akAnother, button, 0, True)
         endif
     endIf
 endEvent
