@@ -12,6 +12,7 @@ Keyword Property KwActorTypeGhost Auto
 Message Property FeedChoice  Auto 
 mslVTMCMDebugSCR Property mslVTMCMQST  Auto
 GlobalVariable  Property mslVTSetFeedMode  Auto
+GlobalVariable Property vtslFeedBlock Auto
 dlc1vampireturnscript Property DLC1VampireTurn  Auto
 Faction Property DLC1PotentialVampireFaction  Auto
 Faction Property DLC1PlayerTurnedVampire  Auto
@@ -20,7 +21,24 @@ PlayerVampireQuestScript Property PlayerVampireQuest  Auto
 event OnInit()
     RegisterForModEvent("OrgasmStart", "OnSexLabOrgasm")
     RegisterForModEvent("SexLabOrgasmSeparate", "OnSexLabOrgasmSeparate")
+	RegisterForModEvent("HookAnimationStart", "OnAnimationStart")
+	RegisterForModEvent("HookAnimationEnd", "OnAnimationEnd")
 endEvent
+
+Event OnAnimationStart(int threadID, bool HasPlayer)
+{this handler and the one for animation end reset feeding block for multuple orgasms}
+    if HasPlayer
+        SexLab.Log("Animation starts, resetting feed blocks")
+        vtslFeedBlock.Value = 0
+    endif
+EndEvent
+
+Event OnAnimationEnd(int threadID, bool HasPlayer)
+    if HasPlayer
+        SexLab.Log("Animation ends, resetting feed blocks")
+        vtslFeedBlock.Value = 0
+    endif
+EndEvent
 
 event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sender)
 {Catch player orgasm events from SexLab}
@@ -62,6 +80,10 @@ event OnSexLabOrgasmSeparate(Form actorRef, int thread)
         SexLab.Log("SLSO - not a PC orgasm")
         return
     endif
+    if vtslFeedBlock.GetValue() != 0
+        SexLab.Log("SLSO - ignoring repeating orgasms")
+        return
+    endif
     String argString = thread as String
     Actor[] actorList = SexLab.HookActors(argString)
     Actor akAnother = none
@@ -84,5 +106,7 @@ event OnSexLabOrgasmSeparate(Form actorRef, int thread)
             endif
             PlayerVampireQuest.VampireFeed(akAnother, button, 0, True)
         endif
+        ; if the player chooses to skip feeding - it's ignored for the rest of the session anyway
+        vtslFeedBlock.Value = 1
     endIf
 endEvent
