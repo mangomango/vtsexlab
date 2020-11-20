@@ -19,10 +19,11 @@ PlayerVampireQuestScript Property PlayerVampireQuest  Auto
 
 event OnInit()
     RegisterForModEvent("OrgasmStart", "OnSexLabOrgasm")
+    RegisterForModEvent("SexLabOrgasmSeparate", "OnSexLabOrgasmSeparate")
 endEvent
 
 event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sender)
-{Catch relevant orgasm events from SexLab}
+{Catch player orgasm events from SexLab}
     Actor[] actorList = SexLab.HookActors(argString)
     if actorList.Length < 2
         SexLab.Log("solo, no feeding")
@@ -42,6 +43,39 @@ event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sende
         i += 1
     endWhile
     if (playerOrgasm && akAnother != none)
+        SexLab.Log("Player orgasm, feeding")
+        int button = FeedChoice.Show()
+        If (button >= 0 && button <= 5)
+            if akAnother.IsInFaction(DLC1PotentialVampireFaction) && akAnother.IsInFaction(DLC1PlayerTurnedVampire) == False
+                DLC1VampireTurn.PlayerBitesMe(akAnother)
+            endif
+            PlayerVampireQuest.VampireFeed(akAnother, button, 0, True)
+        endif
+    endIf
+endEvent
+
+event OnSexLabOrgasmSeparate(Form actorRef, int thread)
+{Catch player orgasm events from SSO}
+    SexLab.Log("SLSO orgasm event received")
+    Actor akActor = ActorRef as Actor
+    if akActor != PlayerRef
+        SexLab.Log("SLSO - not a PC orgasm")
+        return
+    endif
+    String argString = thread as String
+    Actor[] actorList = SexLab.HookActors(argString)
+    Actor akAnother = none
+    int i = 0
+    while (i < actorList.Length)
+        Actor ac = actorList[i]
+        If ac != PlayerRef && (akAnother == none && (ac.HasSpell(SpFalmerAbilities) || ac.HasKeyword(KwActorTypeNPC)) && !ac.HasKeyword(KwActorTypeUndead) && !ac.HasKeyword(KwActorTypeDaedra) && !ac.HasKeyword(KwActorTypeDragon) && !ac.HasKeyword(KwActorTypeDwarven) && !ac.HasKeyword(KwActorTypeGhost) )
+            ; found an actor suitable for feeding
+            akAnother = ac
+            SexLab.Log("Found a suitable NPC to feed on")
+        endIf
+        i += 1
+    endWhile
+    if akAnother != none
         SexLab.Log("Player orgasm, feeding")
         int button = FeedChoice.Show()
         If (button >= 0 && button <= 5)
