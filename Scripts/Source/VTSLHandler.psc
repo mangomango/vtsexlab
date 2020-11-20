@@ -19,5 +19,10 @@ Function StartFeedingSex(Actor akSpeaker)
             anims = SexLab.GetAnimationsByTags(2, "Vaginal,Facing,Loving", "Furniture,Aggressive,Anal")
         endif
     endif
+    If Game.GetModByName("SexLab Eager NPCs.esp") != 255
+        SexLab.Log("attempting to increase SLEN relationship status")
+        SLENMainController slenc = Game.GetFormFromFile(0x0D62,"SexLab Eager NPCs.esp") AS SLENMainController
+        slenc.QueueModPlayerLove(akSpeaker, 33)
+    endif
     SexLab.StartSex(sexActors, anims)
 EndFunction
