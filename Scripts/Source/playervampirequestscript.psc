@@ -479,11 +479,13 @@ Function VampireChange(Actor Target)
 	Target.AddSpell(VampiresSightSP, false)
 
 	SendModEvent("VTVampireChange")
+
+	Target.SendVampirismStateChanged(true)
 	
 EndFunction
 
-Function VampireFeed(Actor akTarget, Int FeedType = 0, Int PassOut = 0, bool havingSex = False)
-
+Function VampireFeed(Actor akTarget, Int FeedType = 0, Int PassOut = 0)
+{{ passOut: 0 - no passout 1 - normal passout 2 - feeding during sex }
 	FeedISMD.apply()
 
 	int MaxHealth = (akTarget.GetAV("Health") as int)
@@ -603,7 +605,7 @@ Function VampireFeed(Actor akTarget, Int FeedType = 0, Int PassOut = 0, bool hav
 	Endif
 
 	int feedArousal = vtslFeedArousal.GetValue() as int
-	if havingSex && feedArousal > 0 
+	if passOut != 2 && feedArousal > 0 
 		SLAFramework.UpdateActorExposure(akPlayer, feedArousal, "feeding")
 	Endif
 
@@ -689,6 +691,8 @@ Function VampireCure(Actor Player)
 	RedVisionImod.Remove()
 
 	SendModEvent("VTVampireCure")
+	
+	Player.SendVampirismStateChanged(false)
 	
 EndFunction
 

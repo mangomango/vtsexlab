@@ -67,7 +67,7 @@ event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sende
             if akAnother.IsInFaction(DLC1PotentialVampireFaction) && akAnother.IsInFaction(DLC1PlayerTurnedVampire) == False
                 DLC1VampireTurn.PlayerBitesMe(akAnother)
             endif
-            PlayerVampireQuest.VampireFeed(akAnother, button, 0, True)
+            PlayerVampireQuest.VampireFeed(akAnother, button, 2)
         endif
     endIf
 endEvent
@@ -104,7 +104,7 @@ event OnSexLabOrgasmSeparate(Form actorRef, int thread)
             if akAnother.IsInFaction(DLC1PotentialVampireFaction) && akAnother.IsInFaction(DLC1PlayerTurnedVampire) == False
                 DLC1VampireTurn.PlayerBitesMe(akAnother)
             endif
-            PlayerVampireQuest.VampireFeed(akAnother, button, 0, True)
+            PlayerVampireQuest.VampireFeed(akAnother, button, 2)
         endif
         ; if the player chooses to skip feeding - it's ignored for the rest of the session anyway
         vtslFeedBlock.Value = 1

@@ -5,18 +5,22 @@ Actor Property PlayerRef  Auto
 
 Function StartFeedingSex(Actor akSpeaker)
     actor[] sexActors = new actor[2]
-    sexActors[0] = PlayerRef
-    sexActors[1] = akSpeaker
     sslBaseAnimation[] anims
     int sexPlayer = PlayerRef.GetActorBase().GetSex()
     int sexSpeaker = akSpeaker.GetLeveledActorBase().GetSex()
-    if sexPlayer == 0 ; male vampire
-        anims = SexLab.GetAnimationsByTags(2, "Vapire,FM")
+    if sexPlayer == 0 ; male vampire, always in the active position
+        sexActors[0] = akSpeaker
+        sexActors[1] = PlayerRef
+        anims = SexLab.GetAnimationsByTags(2, "Vapire")
     Else ; female vampire
         if sexSpeaker == 0 ; female vampire on male victims
+            sexActors[0] = PlayerRef
+            sexActors[1] = akSpeaker
             anims = SexLab.GetAnimationsByTags(2, "Cowgirl")
         else ; female vampire FF
-            anims = SexLab.GetAnimationsByTags(2, "Vaginal,Facing,Loving", "Furniture,Aggressive,Anal")
+            sexActors[0] = akSpeaker
+            sexActors[1] = PlayerRef
+            anims = SexLab.GetAnimationsByTags(2, "Facing,Loving", "Furniture,Aggressive,Anal")
         endif
     endif
     If Game.GetModByName("SexLab Eager NPCs.esp") != 255
