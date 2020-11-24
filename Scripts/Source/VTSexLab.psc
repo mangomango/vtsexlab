@@ -11,6 +11,7 @@ Keyword Property KwActorTypeDwarven Auto
 Keyword Property KwActorTypeGhost Auto
 Message Property FeedChoice  Auto 
 mslVTMCMDebugSCR Property mslVTMCMQST  Auto
+GlobalVariable Property playerIsVampire Auto
 GlobalVariable  Property mslVTSetFeedMode  Auto
 GlobalVariable Property vtslFeedBlock Auto
 dlc1vampireturnscript Property DLC1VampireTurn  Auto
@@ -27,14 +28,14 @@ endEvent
 
 Event OnAnimationStart(int threadID, bool HasPlayer)
 {this handler and the one for animation end reset feeding block for multuple orgasms}
-    if HasPlayer
+    if HasPlayer && playerIsVampire.GetValue() == 1
         SexLab.Log("Animation starts, resetting feed blocks")
         vtslFeedBlock.Value = 0
     endif
 EndEvent
 
 Event OnAnimationEnd(int threadID, bool HasPlayer)
-    if HasPlayer
+    if HasPlayer && playerIsVampire.GetValue() == 1
         SexLab.Log("Animation ends, resetting feed blocks")
         vtslFeedBlock.Value = 0
     endif
@@ -42,6 +43,9 @@ EndEvent
 
 event OnSexLabOrgasm(string hookName, string argString, float argNum, Form sender)
 {Catch player orgasm events from SexLab}
+    if playerIsVampire.GetValue() != 1
+        return
+    endif
     Actor[] actorList = SexLab.HookActors(argString)
     if actorList.Length < 2
         SexLab.Log("solo, no feeding")
@@ -75,6 +79,9 @@ endEvent
 event OnSexLabOrgasmSeparate(Form actorRef, int thread)
 {Catch player orgasm events from SSO}
     SexLab.Log("SLSO orgasm event received")
+    if playerIsVampire.GetValue() != 1
+        return
+    endif
     Actor akActor = ActorRef as Actor
     if akActor != PlayerRef
         SexLab.Log("SLSO - not a PC orgasm")
