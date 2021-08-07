@@ -16,7 +16,7 @@ Function StartFeedingSex(Actor akSpeaker)
         if sexSpeaker == 0 ; female vampire on male victims
             sexActors[0] = PlayerRef
             sexActors[1] = akSpeaker
-            anims = SexLab.GetAnimationsByTags(2, "Cowgirl")
+            anims = SexLab.GetAnimationsByTags(2, "Cowgirl,Sex")
         else ; female vampire FF
             sexActors[0] = akSpeaker
             sexActors[1] = PlayerRef

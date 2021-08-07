@@ -25,6 +25,7 @@ Float Property LastFeedTime Auto
 Float Property FeedTimer Auto
 GlobalVariable Property GameDaysPassed Auto
 GlobalVariable Property GameHour  Auto
+GlobalVariable Property vtslAgeHungerRateDecrease Auto
 
 Idle Property VampireFeedingBedRight Auto
 Idle Property VampireFeedingBedrollRight Auto
@@ -89,7 +90,7 @@ Event OnUpdate()
 	EndIf
 	If TimeOld != 0
 		BloodCurVar = BloodCur.GetValue() - (DetActVar + DetNatVar)*DetMult / age
-		mslVTExp.Mod(((DetAct.GetValue()*TSAdjust)*DetMult/2*mslVTExpMult.GetValue()))
+		mslVTExp.Mod(((DetAct.GetValue()*TSAdjust)*DetMult/vtslAgeHungerRateDecrease.GetValue()*mslVTExpMult.GetValue()))
 	Endif
 
 ;	MessageBox("This much game time has passed: " + TimePassed + " Old: " + TimeOld + " New: " + TimeNew)
