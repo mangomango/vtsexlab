@@ -8,6 +8,7 @@ GlobalVariable Property vtslFeedingOrgasm Auto
 
 int _oid_keyVampireSight
 int _oid_feedOnOrgasm
+int _oid_feedArousal
 int _oid_AgeHungerRateDecrease
 string[] _val_feedOnOrgasmLabels
 
@@ -29,6 +30,7 @@ event OnPageReset(string page)
 		SetCursorPosition(0)
         AddHeaderOption("Game settings")
         _oid_AgeHungerRateDecrease = AddSliderOption("Decrease of the hunger rate with age", vtslAgeHungerRateDecrease.Value as float, "{1}x")
+		_oid_feedArousal = AddSliderOption("Arousal increase from feeding", vtslFeedArousal.Value as float, "{1}")
         AddHeaderOption("SexLab - Separate Orgasms")
         _oid_feedOnOrgasm = AddMenuOption("Feed on orgasm...", _val_feedOnOrgasmLabels[vtslFeedingOrgasm.Value as int])
 		SetCursorPosition(1)
@@ -61,6 +63,12 @@ event OnOptionSliderOpen(int option)
 		SetSliderDialogRange(1.0, 5.0)
 		SetSliderDialogInterval(0.1)
 	endIf
+	if (option == _oid_feedArousal)
+		SetSliderDialogStartValue(vtslFeedArousal.Value as float)
+		SetSliderDialogDefaultValue(2.0)
+		SetSliderDialogRange(0.0, 10.0)
+		SetSliderDialogInterval(0.1)
+	endif
 endEvent
 
 event OnOptionSliderAccept(int option, float value)
@@ -68,6 +76,10 @@ event OnOptionSliderAccept(int option, float value)
 		vtslAgeHungerRateDecrease.Value = value
 		SetSliderOptionValue(option, value, "{1}x")
 	endIf
+	if (option == _oid_feedArousal)
+		vtslFeedArousal.Value = value
+		SetSliderOptionValue(option, value, "{1}")
+	endif
 endEvent
 
 Function AssignKey(globalvariable hotKey, int option, int keyCode, string conflictControl, string conflictName)
