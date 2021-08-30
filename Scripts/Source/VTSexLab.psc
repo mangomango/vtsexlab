@@ -93,14 +93,27 @@ event OnSexLabOrgasmSeparate(Form actorRef, int thread)
     endif
     Actor akAnother = none
     Actor akActor = ActorRef as Actor
+    ; check if this scene includes player at all
+    String argString = thread as String
+    Actor[] actorList = SexLab.HookActors(argString)
+    bool hasPlayer = False
+    int i = 0
+    while (i < actorList.Length) &&!hasPlayer
+        Actor ac = actorList[i]
+        If ac == PlayerRef
+            hasPlayer = True
+        endIf
+        i += 1
+    endWhile
+    if !hasPlayer
+        return
+    endif
     if vtslFeedingOrgasm.Value == 0
         if akActor != PlayerRef
             SexLab.Log("VTSL: SLSO - not a PC orgasm due to MCM settings")
             return
         endif
-        String argString = thread as String
-        Actor[] actorList = SexLab.HookActors(argString)
-        int i = 0
+        i = 0
         while (i < actorList.Length)
             Actor ac = actorList[i]
             If ac != PlayerRef && (akAnother == none && isValidFeedingTarget(ac))
